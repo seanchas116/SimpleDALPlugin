@@ -153,7 +153,7 @@ class Stream: Object {
             return
         }
 
-        CMSimpleQueueEnqueue(queue, element: sampleBufferPtr)
-        queueAlteredProc?(objectID, sampleBufferPtr, queueAlteredRefCon)
+        CMSimpleQueueEnqueue(queue, element: sampleBufferPtr.pointee!.toOpaque())
+        queueAlteredProc?(objectID, sampleBufferPtr.pointee!.toOpaque(), queueAlteredRefCon)
     }
 }
