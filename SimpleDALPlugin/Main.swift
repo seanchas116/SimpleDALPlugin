@@ -7,3 +7,10 @@
 //
 
 import Foundation
+import os.log
+
+@_cdecl("simpleDALPluginMain")
+func simpleDALPluginMain(allocator: CFAllocator, requestedTypeUUID: CFUUID) -> UnsafeRawPointer {
+    os_log("simpleDALPluginMain")
+    return UnsafeRawPointer(bitPattern: 0)!
+}
