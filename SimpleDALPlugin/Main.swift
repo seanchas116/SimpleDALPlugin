@@ -12,5 +12,5 @@ import CoreMediaIO
 @_cdecl("simpleDALPluginMain")
 func simpleDALPluginMain(allocator: CFAllocator, requestedTypeUUID: CFUUID) -> PluginRef {
     NSLog("simpleDALPluginMain")
-    return createPluginRef()
+    return pluginRef
 }

@@ -18,7 +18,7 @@ func createPluginInterface() -> CMIOHardwarePlugInInterface {
         QueryInterface: { (plugin: UnsafeMutableRawPointer?, uuid: REFIID, interface: UnsafeMutablePointer<LPVOID?>?) -> HRESULT in
             NSLog("QueryInterface")
             let pluginRefPtr = UnsafeMutablePointer<PluginRef?>(OpaquePointer(interface))
-            pluginRefPtr?.pointee = createPluginRef()
+            pluginRefPtr?.pointee = pluginRef
             refCount += 1
             return HRESULT(kCMIOHardwareNoError)
         },
@@ -113,11 +113,11 @@ func createPluginInterface() -> CMIOHardwarePlugInInterface {
         })
 }
 
-func createPluginRef() -> PluginRef {
+let pluginRef: PluginRef = {
     let interfacePtr = UnsafeMutablePointer<CMIOHardwarePlugInInterface>.allocate(capacity: 1)
     interfacePtr.pointee = createPluginInterface()
 
     let pluginRef = PluginRef.allocate(capacity: 1)
     pluginRef.pointee = interfacePtr
     return pluginRef
-}
+}()
