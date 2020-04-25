@@ -21,14 +21,14 @@ class Stream: Object {
 
     lazy var formatDescription: CMVideoFormatDescription? = {
         var formatDescription: CMVideoFormatDescription?
-        let err = CMVideoFormatDescriptionCreate(
+        let error = CMVideoFormatDescriptionCreate(
             allocator: kCFAllocatorDefault,
             codecType: kCMVideoCodecType_422YpCbCr8,
             width: Int32(width), height: Int32(height),
             extensions: nil,
             formatDescriptionOut: &formatDescription)
-        guard err == noErr else {
-            log("CMVideoFormatDescriptionCreate Error: \(err)")
+        guard error == noErr else {
+            log("CMVideoFormatDescriptionCreate Error: \(error)")
             return nil
         }
         return formatDescription
@@ -37,15 +37,15 @@ class Stream: Object {
     lazy var clock: CFTypeRef? = {
         var clock = UnsafeMutablePointer<Unmanaged<CFTypeRef>?>.allocate(capacity: 1)
 
-        let err = CMIOStreamClockCreate(
+        let error = CMIOStreamClockCreate(
             kCFAllocatorDefault,
             "SimpleDALPlugin clock" as CFString,
             Unmanaged.passUnretained(self).toOpaque(),
             CMTimeMake(value: 1, timescale: 10),
             100, 10,
             clock);
-        guard err == noErr else {
-            log("CMIOStreamClockCreate Error: \(err)")
+        guard error == noErr else {
+            log("CMIOStreamClockCreate Error: \(error)")
             return nil
         }
         return clock.pointee?.takeUnretainedValue()
@@ -53,12 +53,12 @@ class Stream: Object {
 
     lazy var queue: CMSimpleQueue? = {
         var queue: CMSimpleQueue?
-        let err = CMSimpleQueueCreate(
+        let error = CMSimpleQueueCreate(
             allocator: kCFAllocatorDefault,
             capacity: 30,
             queueOut: &queue)
-        guard err == noErr else {
-            log("CMSimpleQueueCreate Error: \(err)")
+        guard error == noErr else {
+            log("CMSimpleQueueCreate Error: \(error)")
             return nil
         }
         return queue
@@ -128,7 +128,7 @@ class Stream: Object {
 
         var error = noErr
 
-        error = CMIOStreamClockPostTimingEvent(timing.presentationTimeStamp, currentTimeNsec, true, self.clock)
+        error = CMIOStreamClockPostTimingEvent(timing.presentationTimeStamp, currentTimeNsec, true, clock)
         guard error == noErr else {
             log("CMSimpleQueueCreate Error: \(error)")
             return
@@ -143,8 +143,6 @@ class Stream: Object {
             log("CMVideoFormatDescriptionCreateForImageBuffer Error: \(error)")
             return
         }
-
-        sequenceNumber += 1
 
         let sampleBufferPtr = UnsafeMutablePointer<Unmanaged<CMSampleBuffer>?>.allocate(capacity: 1)
         error = CMIOSampleBufferCreateForImageBuffer(
@@ -163,5 +161,7 @@ class Stream: Object {
 
         CMSimpleQueueEnqueue(queue, element: sampleBufferPtr.pointee!.toOpaque())
         queueAlteredProc?(objectID, sampleBufferPtr.pointee!.toOpaque(), queueAlteredRefCon)
+
+        sequenceNumber += 1
     }
 }
