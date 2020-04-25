@@ -226,8 +226,7 @@ func createPluginInterface() -> CMIOHardwarePlugInInterface {
 
             stream.queueAlteredProc = queueAlteredProc
             stream.queueAlteredRefCon = queueAlteredRefCon
-            let unmanagedQueue = Unmanaged<CMSimpleQueue>.passRetained(queue)
-            UnsafeMutablePointer<Unmanaged<CMSimpleQueue>>(OpaquePointer(queueOut)).pointee = unmanagedQueue
+            queueOut.pointee = Unmanaged<CMSimpleQueue>.passRetained(queue)
 
             return noErr
         },
