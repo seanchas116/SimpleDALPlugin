@@ -11,6 +11,7 @@ import IOKit
 
 class Device: Object {
     var objectID: CMIOObjectID = 0
+    var streamID: CMIOStreamID = 0
     let name = "SimpleDALPlugin"
     let deviceUID = "SimpleDALPlugin Device"
 
@@ -18,7 +19,14 @@ class Device: Object {
         switch (Int(address.mSelector)) {
         case kCMIOObjectPropertyName:
             return true
-
+        case kCMIODevicePropertyDeviceUID:
+            return true
+        case kCMIODevicePropertyTransportType:
+            return true
+        case kCMIODevicePropertyDeviceIsRunningSomewhere:
+            return true
+        case kCMIODevicePropertyStreams:
+            return true
         default:
             return false
         }
@@ -36,6 +44,10 @@ class Device: Object {
             return String.dataSize
         case kCMIODevicePropertyTransportType:
             return UInt32.dataSize
+        case kCMIODevicePropertyDeviceIsRunningSomewhere:
+            return UInt32.dataSize
+        case kCMIODevicePropertyStreams:
+            return CMIOStreamID.dataSize
         default:
             return 0
         }
@@ -51,6 +63,10 @@ class Device: Object {
             deviceUID.toData(data: data)
         case kCMIODevicePropertyTransportType:
             UInt32(kIOAudioDeviceTransportTypeBuiltIn).toData(data: data)
+        case kCMIODevicePropertyDeviceIsRunningSomewhere:
+            return UInt32(1).toData(data: data)
+        case kCMIODevicePropertyStreams:
+            return streamID.toData(data: data)
         default: break
         }
     }

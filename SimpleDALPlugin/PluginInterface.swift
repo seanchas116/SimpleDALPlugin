@@ -64,6 +64,8 @@ func createPluginInterface() -> CMIOHardwarePlugInInterface {
             }
             addObject(object: stream)
 
+            device.streamID = stream.objectID
+
             error = CMIOObjectsPublishedAndDied(plugin, CMIOObjectID(kCMIOObjectSystemObject), 1, &device.objectID, 0, nil)
             guard error == OSStatus(kCMIOHardwareNoError) else {
                 log("error: \(error)")
