@@ -13,7 +13,7 @@ class Stream: Object {
     let name = "SimpleDALPlugin"
     let width = 1280
     let height = 720
-    let frameRate = 60
+    let frameRate = 30
 
     private var timer: Timer?
     private var sequenceNumber: UInt64 = 0
