@@ -15,7 +15,6 @@ class Stream: Object {
     let height = 720
     let frameRate = 30
 
-    private var timer: Timer?
     private var sequenceNumber: UInt64 = 0
     private var queueAlteredProc: CMIODeviceStreamQueueAlteredProc?
     private var queueAlteredRefCon: UnsafeMutableRawPointer?
@@ -65,6 +64,16 @@ class Stream: Object {
         return queue
     }()
 
+    private lazy var timer: DispatchSourceTimer = {
+        let interval = 1.0 / Double(frameRate)
+        let timer = DispatchSource.makeTimerSource()
+        timer.schedule(deadline: .now() + interval, repeating: interval)
+        timer.setEventHandler(handler: { [weak self] in
+            self?.enqueueBuffer()
+        })
+        return timer
+    }()
+
     lazy var properties: [Int : Property] = [
         kCMIOObjectPropertyName: Property(name),
         kCMIOStreamPropertyFormatDescription: Property(formatDescription!),
@@ -78,14 +87,11 @@ class Stream: Object {
     ]
 
     func start() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0 / Double(frameRate), repeats: true) { [weak self] _ in
-            self?.enqueueBuffer()
-        }
+        timer.resume()
     }
 
     func stop() {
-        timer?.invalidate()
-        timer = nil
+        timer.suspend()
     }
 
     func copyBufferQueue(queueAlteredProc: CMIODeviceStreamQueueAlteredProc?, queueAlteredRefCon: UnsafeMutableRawPointer?) -> CMSimpleQueue? {
