@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE8832AC2454424600326232 /* CVPixelBuffer+SimpleDALPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8832AB2454424600326232 /* CVPixelBuffer+SimpleDALPlugin.swift */; };
 		BEF5B53A2453D9CA00E7FC18 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B5392453D9CA00E7FC18 /* Main.swift */; };
 		BEF5B53D2453DFA200E7FC18 /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEF5B53C2453DFA200E7FC18 /* CoreMediaIO.framework */; };
 		BEF5B53F2453E8F500E7FC18 /* PluginInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B53E2453E8F500E7FC18 /* PluginInterface.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE8832AB2454424600326232 /* CVPixelBuffer+SimpleDALPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CVPixelBuffer+SimpleDALPlugin.swift"; sourceTree = "<group>"; };
 		BEF5B52F2453D9B300E7FC18 /* SimpleDALPlugin.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleDALPlugin.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEF5B5322453D9B300E7FC18 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BEF5B5382453D9CA00E7FC18 /* SimpleDALPlugin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimpleDALPlugin-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				BEF5B546245403AF00E7FC18 /* Device.swift */,
 				BEF5B54924540C0500E7FC18 /* Stream.swift */,
 				BEF5B54C245417B600E7FC18 /* Property.swift */,
+				BE8832AB2454424600326232 /* CVPixelBuffer+SimpleDALPlugin.swift */,
 			);
 			path = SimpleDALPlugin;
 			sourceTree = "<group>";
@@ -158,6 +161,7 @@
 				BEF5B53F2453E8F500E7FC18 /* PluginInterface.swift in Sources */,
 				BEF5B5412453F50000E7FC18 /* Object.swift in Sources */,
 				BEF5B5452454003B00E7FC18 /* Log.swift in Sources */,
+				BE8832AC2454424600326232 /* CVPixelBuffer+SimpleDALPlugin.swift in Sources */,
 				BEF5B547245403AF00E7FC18 /* Device.swift in Sources */,
 				BEF5B5432453FE5D00E7FC18 /* Plugin.swift in Sources */,
 				BEF5B53A2453D9CA00E7FC18 /* Main.swift in Sources */,
