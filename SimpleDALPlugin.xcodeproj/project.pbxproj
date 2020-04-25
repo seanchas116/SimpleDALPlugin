@@ -15,6 +15,7 @@
 		BEF5B5452454003B00E7FC18 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B5442454003B00E7FC18 /* Log.swift */; };
 		BEF5B547245403AF00E7FC18 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B546245403AF00E7FC18 /* Device.swift */; };
 		BEF5B54A24540C0500E7FC18 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B54924540C0500E7FC18 /* Stream.swift */; };
+		BEF5B54D245417B600E7FC18 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B54C245417B600E7FC18 /* Property.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		BEF5B5442454003B00E7FC18 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		BEF5B546245403AF00E7FC18 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		BEF5B54924540C0500E7FC18 /* Stream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stream.swift; sourceTree = "<group>"; };
+		BEF5B54C245417B600E7FC18 /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				BEF5B5442454003B00E7FC18 /* Log.swift */,
 				BEF5B546245403AF00E7FC18 /* Device.swift */,
 				BEF5B54924540C0500E7FC18 /* Stream.swift */,
+				BEF5B54C245417B600E7FC18 /* Property.swift */,
 			);
 			path = SimpleDALPlugin;
 			sourceTree = "<group>";
@@ -158,6 +161,7 @@
 				BEF5B547245403AF00E7FC18 /* Device.swift in Sources */,
 				BEF5B5432453FE5D00E7FC18 /* Plugin.swift in Sources */,
 				BEF5B53A2453D9CA00E7FC18 /* Main.swift in Sources */,
+				BEF5B54D245417B600E7FC18 /* Property.swift in Sources */,
 				BEF5B54A24540C0500E7FC18 /* Stream.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

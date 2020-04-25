@@ -28,7 +28,7 @@ class Plugin: Object {
     func getPropertyDataSize(address: CMIOObjectPropertyAddress) -> UInt32 {
         switch (Int(address.mSelector)) {
         case kCMIOObjectPropertyName:
-            return UInt32(MemoryLayout<CFString>.size)
+            return String.dataSize
         default:
             return 0
         }
@@ -39,9 +39,7 @@ class Plugin: Object {
 
         switch (Int(address.mSelector)) {
         case kCMIOObjectPropertyName:
-            let cfName = name as CFString
-            let unmanagedCFname = Unmanaged<CFString>.passRetained(cfName)
-            UnsafeMutablePointer<Unmanaged<CFString>>(OpaquePointer(data)).pointee = unmanagedCFname
+            name.toData(data: data)
         default: break
         }
     }
