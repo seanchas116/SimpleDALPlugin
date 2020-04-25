@@ -64,6 +64,18 @@ func createPluginInterface() -> CMIOHardwarePlugInInterface {
             }
             addObject(object: stream)
 
+            error = CMIOObjectsPublishedAndDied(plugin, CMIOObjectID(kCMIOObjectSystemObject), 1, &device.objectID, 0, nil)
+            guard error == OSStatus(kCMIOHardwareNoError) else {
+                log("error: \(error)")
+                return error
+            }
+
+            error = CMIOObjectsPublishedAndDied(plugin, device.objectID, 1, &stream.objectID, 0, nil)
+            guard error == OSStatus(kCMIOHardwareNoError) else {
+                log("error: \(error)")
+                return error
+            }
+
             return OSStatus(kCMIOHardwareNoError)
         },
         Teardown: { (plugin: CMIOHardwarePlugInRef?) -> OSStatus in
@@ -75,7 +87,7 @@ func createPluginInterface() -> CMIOHardwarePlugInInterface {
         },
 
         ObjectHasProperty: { (plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?) -> DarwinBoolean in
-            log("ObjectHasProperty")
+            log("ObjectHasProperty: \(address?.pointee.mSelector)")
             guard let address = address?.pointee else {
                 log("Address is nil")
                 return false
