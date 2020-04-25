@@ -22,6 +22,7 @@ class Device: Object {
         kCMIODevicePropertyDeviceIsRunningSomewhere: Property(UInt32(1)),
         kCMIODevicePropertyDeviceCanBeDefaultDevice: Property(UInt32(1)),
         kCMIOStreamPropertyDirection: Property(UInt32(0)),
+        kCMIODevicePropertyHogMode: Property(Int32(-1)),
         kCMIODevicePropertyStreams: Property { [unowned self] in self.streamID },
     ]
 }

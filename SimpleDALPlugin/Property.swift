@@ -43,6 +43,15 @@ extension UInt32: PropertyValue {
     }
 }
 
+extension Int32: PropertyValue {
+    var dataSize: UInt32 {
+        return UInt32(MemoryLayout<Int32>.size)
+    }
+    func toData(data: UnsafeMutableRawPointer) {
+        UnsafeMutablePointer<Int32>(OpaquePointer(data)).pointee = self
+    }
+}
+
 class Property {
     let getter: () -> PropertyValue
     let isSettable = false
