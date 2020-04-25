@@ -8,17 +8,17 @@
 
 import Foundation
 import CoreMediaIO
-import os.log
 
 typealias PluginRef = UnsafeMutablePointer<UnsafeMutablePointer<CMIOHardwarePlugInInterface>>
 
 @_cdecl("simpleDALPluginMain")
 func simpleDALPluginMain(allocator: CFAllocator, requestedTypeUUID: CFUUID) -> PluginRef {
-    os_log("simpleDALPluginMain")
+    NSLog("simpleDALPluginMain")
 
     var interface = CMIOHardwarePlugInInterface()
 
     let pluginRef = PluginRef.allocate(capacity: 1)
     pluginRef.pointee.initialize(to: interface)
+
     return pluginRef
 }
