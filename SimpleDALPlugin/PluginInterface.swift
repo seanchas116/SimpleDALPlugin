@@ -8,20 +8,28 @@
 
 import Foundation
 
+typealias PluginRef = UnsafeMutablePointer<UnsafeMutablePointer<CMIOHardwarePlugInInterface>>
+
+private var refCount: ULONG = 0
+
 func createPluginInterface() -> CMIOHardwarePlugInInterface {
     return CMIOHardwarePlugInInterface(
         _reserved: nil,
         QueryInterface: { (plugin: UnsafeMutableRawPointer?, uuid: REFIID, interface: UnsafeMutablePointer<LPVOID?>?) -> HRESULT in
             NSLog("QueryInterface")
-            // return E_FAIL
-            return HRESULT(bitPattern: 0x80000008)
+            let pluginRefPtr = UnsafeMutablePointer<PluginRef?>(OpaquePointer(interface))
+            pluginRefPtr?.pointee = createPluginRef()
+            refCount += 1
+            return HRESULT(kCMIOHardwareNoError)
         },
         AddRef: { (plugin: UnsafeMutableRawPointer?) -> ULONG in
             NSLog("AddRef")
-            return 0
+            refCount += 1
+            return refCount
         },
         Release: { (plugin: UnsafeMutableRawPointer?) -> ULONG in
             NSLog("Release")
+            refCount -= 1
             return 0
         },
         Initialize: { (plugin: CMIOHardwarePlugInRef?) -> OSStatus in
@@ -103,4 +111,13 @@ func createPluginInterface() -> CMIOHardwarePlugInInterface {
             NSLog("StreamDeckCueTo")
             return OSStatus(kCMIOHardwareIllegalOperationError)
         })
+}
+
+func createPluginRef() -> PluginRef {
+    let interfacePtr = UnsafeMutablePointer<CMIOHardwarePlugInInterface>.allocate(capacity: 1)
+    interfacePtr.pointee = createPluginInterface()
+
+    let pluginRef = PluginRef.allocate(capacity: 1)
+    pluginRef.pointee = interfacePtr
+    return pluginRef
 }
