@@ -14,14 +14,13 @@ extension CVPixelBuffer {
         let options = [
             kCVPixelBufferCGImageCompatibilityKey as String: true,
             kCVPixelBufferCGBitmapContextCompatibilityKey as String: true,
-            kCVPixelBufferIOSurfacePropertiesKey as String: [:]
         ] as [String: Any]
 
         let error = CVPixelBufferCreate(
             kCFAllocatorSystemDefault,
             Int(size.width),
             Int(size.height),
-            kCVPixelFormatType_32BGRA,
+            kCVPixelFormatType_32ARGB,
             options as CFDictionary,
             &pixelBuffer)
 
@@ -51,7 +50,7 @@ extension CVPixelBuffer {
             width: width, height: height, bitsPerComponent: 8,
             bytesPerRow: bytesPerRow,
             space: colorSpace,
-            bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
+            bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Big.rawValue)
 
         if let context = context {
             callback(context)
