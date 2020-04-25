@@ -8,11 +8,9 @@
 
 import Foundation
 
-typealias PluginRef = UnsafeMutablePointer<UnsafeMutablePointer<CMIOHardwarePlugInInterface>>
-
 private func QueryInterface(plugin: UnsafeMutableRawPointer?, uuid: REFIID, interface: UnsafeMutablePointer<LPVOID?>?) -> HRESULT {
     log()
-    let pluginRefPtr = UnsafeMutablePointer<PluginRef?>(OpaquePointer(interface))
+    let pluginRefPtr = UnsafeMutablePointer<CMIOHardwarePlugInRef?>(OpaquePointer(interface))
     pluginRefPtr?.pointee = pluginRef
     return HRESULT(noErr)
 }
@@ -271,11 +269,11 @@ private func createPluginInterface() -> CMIOHardwarePlugInInterface {
         StreamDeckCueTo: StreamDeckCueTo)
 }
 
-let pluginRef: PluginRef = {
+let pluginRef: CMIOHardwarePlugInRef = {
     let interfacePtr = UnsafeMutablePointer<CMIOHardwarePlugInInterface>.allocate(capacity: 1)
     interfacePtr.pointee = createPluginInterface()
 
-    let pluginRef = PluginRef.allocate(capacity: 1)
+    let pluginRef = CMIOHardwarePlugInRef.allocate(capacity: 1)
     pluginRef.pointee = interfacePtr
     return pluginRef
 }()

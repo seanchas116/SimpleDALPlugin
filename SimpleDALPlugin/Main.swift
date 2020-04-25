@@ -10,7 +10,7 @@ import Foundation
 import CoreMediaIO
 
 @_cdecl("simpleDALPluginMain")
-func simpleDALPluginMain(allocator: CFAllocator, requestedTypeUUID: CFUUID) -> PluginRef {
+func simpleDALPluginMain(allocator: CFAllocator, requestedTypeUUID: CFUUID) -> CMIOHardwarePlugInRef {
     NSLog("simpleDALPluginMain")
     return pluginRef
 }
