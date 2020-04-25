@@ -220,15 +220,11 @@ private func StreamCopyBufferQueue(plugin: CMIOHardwarePlugInRef?, streamID: CMI
         log("no stream")
         return OSStatus(kCMIOHardwareBadObjectError)
     }
-    guard let queue = stream.queue else {
+    guard let queue = stream.copyBufferQueue(queueAlteredProc: queueAlteredProc, queueAlteredRefCon: queueAlteredRefCon) else {
         log("no queue")
         return OSStatus(kCMIOHardwareBadObjectError)
     }
-
-    stream.queueAlteredProc = queueAlteredProc
-    stream.queueAlteredRefCon = queueAlteredRefCon
     queueOut.pointee = Unmanaged<CMSimpleQueue>.passRetained(queue)
-
     return noErr
 }
 

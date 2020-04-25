@@ -16,10 +16,10 @@ class Stream: Object {
 
     private var timer: Timer?
     private var sequenceNumber: UInt64 = 0
-    var queueAlteredProc: CMIODeviceStreamQueueAlteredProc?
-    var queueAlteredRefCon: UnsafeMutableRawPointer?
+    private var queueAlteredProc: CMIODeviceStreamQueueAlteredProc?
+    private var queueAlteredRefCon: UnsafeMutableRawPointer?
 
-    lazy var formatDescription: CMVideoFormatDescription? = {
+    private lazy var formatDescription: CMVideoFormatDescription? = {
         var formatDescription: CMVideoFormatDescription?
         let error = CMVideoFormatDescriptionCreate(
             allocator: kCFAllocatorDefault,
@@ -34,7 +34,7 @@ class Stream: Object {
         return formatDescription
     }()
 
-    lazy var clock: CFTypeRef? = {
+    private lazy var clock: CFTypeRef? = {
         var clock = UnsafeMutablePointer<Unmanaged<CFTypeRef>?>.allocate(capacity: 1)
 
         let error = CMIOStreamClockCreate(
@@ -51,7 +51,7 @@ class Stream: Object {
         return clock.pointee?.takeUnretainedValue()
     }()
 
-    lazy var queue: CMSimpleQueue? = {
+    private lazy var queue: CMSimpleQueue? = {
         var queue: CMSimpleQueue?
         let error = CMSimpleQueueCreate(
             allocator: kCFAllocatorDefault,
@@ -86,7 +86,13 @@ class Stream: Object {
         timer = nil
     }
 
-    func createPixelBuffer() -> CVPixelBuffer? {
+    func copyBufferQueue(queueAlteredProc: CMIODeviceStreamQueueAlteredProc?, queueAlteredRefCon: UnsafeMutableRawPointer?) -> CMSimpleQueue? {
+        self.queueAlteredProc = queueAlteredProc
+        self.queueAlteredRefCon = queueAlteredRefCon
+        return self.queue
+    }
+
+    private func createPixelBuffer() -> CVPixelBuffer? {
         let pixelBuffer = CVPixelBuffer.create(size: CGSize(width: width, height: height))
         pixelBuffer?.modifyWithContext { [width, height] context in
             let time = Double(mach_absolute_time()) / Double(1000_000_000)
@@ -102,7 +108,7 @@ class Stream: Object {
         return pixelBuffer
     }
 
-    func enqueueBuffer() {
+    private func enqueueBuffer() {
         guard let queue = queue else {
             log("queue is nil")
             return
