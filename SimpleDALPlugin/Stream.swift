@@ -46,6 +46,19 @@ class Stream: Object {
         return clock.pointee?.takeUnretainedValue()
     }()
 
+    lazy var queue: CMSimpleQueue? = {
+        var queue: CMSimpleQueue?
+        let err = CMSimpleQueueCreate(
+            allocator: kCFAllocatorDefault,
+            capacity: 30,
+            queueOut: &queue)
+        guard err == noErr else {
+            log("CMSimpleQueueCreate Error: \(err)")
+            return nil
+        }
+        return queue
+    }()
+
     lazy var properties: [Int : Property] = [
         kCMIOObjectPropertyName: Property(name),
         kCMIOStreamPropertyFormatDescription: Property(formatDescription!),
