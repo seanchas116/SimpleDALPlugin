@@ -252,7 +252,7 @@ private func StreamDeckCueTo(plugin: CMIOHardwarePlugInRef?, streamID: CMIOStrea
     return OSStatus(kCMIOHardwareIllegalOperationError)
 }
 
-func createPluginInterface() -> CMIOHardwarePlugInInterface {
+private func createPluginInterface() -> CMIOHardwarePlugInInterface {
     return CMIOHardwarePlugInInterface(
         _reserved: nil,
         QueryInterface: QueryInterface,
