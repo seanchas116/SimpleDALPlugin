@@ -16,8 +16,8 @@ class Stream: Object {
 
     private var timer: Timer?
     private var sequenceNumber: UInt64 = 0
-    private var queueAlteredProc: CMIODeviceStreamQueueAlteredProc?
-    private var queueAlteredRefCon: UnsafeMutableRawPointer?
+    var queueAlteredProc: CMIODeviceStreamQueueAlteredProc?
+    var queueAlteredRefCon: UnsafeMutableRawPointer?
 
     lazy var formatDescription: CMVideoFormatDescription? = {
         var formatDescription: CMVideoFormatDescription?

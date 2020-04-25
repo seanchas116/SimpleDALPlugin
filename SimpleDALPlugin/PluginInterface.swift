@@ -171,32 +171,67 @@ func createPluginInterface() -> CMIOHardwarePlugInInterface {
 
         DeviceSuspend: { (plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID) -> OSStatus in
             log("DeviceSuspend")
-            return OSStatus(kCMIOHardwareIllegalOperationError)
+            return noErr
         },
+
         DeviceResume: { (plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID) -> OSStatus in
             log("DeviceResume")
-            return OSStatus(kCMIOHardwareIllegalOperationError)
+            return noErr
         },
+
         DeviceStartStream: { (plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID, streamID: CMIOStreamID) -> OSStatus in
             log("DeviceStartStream")
-            return OSStatus(kCMIOHardwareIllegalOperationError)
+            guard let stream = objects[streamID] as? Stream else {
+                log("no stream")
+                return OSStatus(kCMIOHardwareBadObjectError)
+            }
+            stream.start()
+            return noErr
         },
+
         DeviceStopStream: { (plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID, streamID: CMIOStreamID) -> OSStatus in
             log("DeviceStopStream")
-            return OSStatus(kCMIOHardwareIllegalOperationError)
+            guard let stream = objects[streamID] as? Stream else {
+                log("no stream")
+                return OSStatus(kCMIOHardwareBadObjectError)
+            }
+            stream.stop()
+            return noErr
         },
+
         DeviceProcessAVCCommand: { (plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID, avcCommand: UnsafeMutablePointer<CMIODeviceAVCCommand>?) -> OSStatus in
             log("DeviceProcessAVCCommand")
             return OSStatus(kCMIOHardwareIllegalOperationError)
         },
+
         DeviceProcessRS422Command: { (plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID, rs422Command: UnsafeMutablePointer<CMIODeviceRS422Command>?) -> OSStatus in
             log("DeviceProcessRS422Command")
             return OSStatus(kCMIOHardwareIllegalOperationError)
         },
-        StreamCopyBufferQueue: { (plugin: CMIOHardwarePlugInRef?, streamID: CMIOStreamID, queueAlteredProc: CMIODeviceStreamQueueAlteredProc?, queueAlteredRefCon: UnsafeMutableRawPointer?, queue: UnsafeMutablePointer<Unmanaged<CMSimpleQueue>?>?) -> OSStatus in
+
+        StreamCopyBufferQueue: { (plugin: CMIOHardwarePlugInRef?, streamID: CMIOStreamID, queueAlteredProc: CMIODeviceStreamQueueAlteredProc?, queueAlteredRefCon: UnsafeMutableRawPointer?, queueOut: UnsafeMutablePointer<Unmanaged<CMSimpleQueue>?>?) -> OSStatus in
             log("StreamCopyBufferQueue")
-            return OSStatus(kCMIOHardwareIllegalOperationError)
+            guard let queueOut = queueOut else {
+                log("no queueOut")
+                return OSStatus(kCMIOHardwareBadObjectError)
+            }
+            guard let stream = objects[streamID] as? Stream else {
+                log("no stream")
+                return OSStatus(kCMIOHardwareBadObjectError)
+            }
+            guard let queue = stream.queue else {
+                log("no queue")
+                return OSStatus(kCMIOHardwareBadObjectError)
+            }
+
+            stream.queueAlteredProc = queueAlteredProc
+            stream.queueAlteredRefCon = queueAlteredRefCon
+            let unmanagedQueue = Unmanaged<CMSimpleQueue>.passRetained(queue)
+            UnsafeMutablePointer<Unmanaged<CMSimpleQueue>>(OpaquePointer(queueOut)).pointee = unmanagedQueue
+
+            return noErr
         },
+
         StreamDeckPlay: { (plugin: CMIOHardwarePlugInRef?, streamID: CMIOStreamID) -> OSStatus in
             log("StreamDeckPlay")
             return OSStatus(kCMIOHardwareIllegalOperationError)
