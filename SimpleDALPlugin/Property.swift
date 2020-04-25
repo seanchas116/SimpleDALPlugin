@@ -94,6 +94,21 @@ extension Float64: PropertyValue {
     }
 }
 
+extension Array: PropertyValue where Element: PropertyValue {
+    var dataSize: UInt32 {
+        return UInt32(MemoryLayout<Element>.size * count)
+    }
+    func toData(data: UnsafeMutableRawPointer) {
+        for i in 0 ..< count {
+            let elemPtr = data.advanced(by: Int(dataSize) * i)
+            self[i].toData(data: elemPtr)
+        }
+    }
+    static func fromData(data: UnsafeRawPointer) -> Self {
+        fatalError("not implemented")
+    }
+}
+
 class Property {
     let getter: () -> PropertyValue
     let setter: ((UnsafeRawPointer) -> Void)?
