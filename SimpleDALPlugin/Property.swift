@@ -41,6 +41,23 @@ extension CMFormatDescription: PropertyValue {
     }
 }
 
+struct CFTypeRefWrapper {
+    let ref: CFTypeRef
+}
+
+extension CFTypeRefWrapper: PropertyValue {
+    var dataSize: UInt32 {
+        return UInt32(MemoryLayout<CFTypeRef>.size)
+    }
+    func toData(data: UnsafeMutableRawPointer) {
+        let unmanaged = Unmanaged<CFTypeRef>.passRetained(ref)
+        UnsafeMutablePointer<Unmanaged<CFTypeRef>>(OpaquePointer(data)).pointee = unmanaged
+    }
+    static func fromData(data: UnsafeRawPointer) -> Self {
+        fatalError("not implemented")
+    }
+}
+
 extension UInt32: PropertyValue {
     var dataSize: UInt32 {
         return UInt32(MemoryLayout<UInt32>.size)

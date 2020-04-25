@@ -29,10 +29,28 @@ class Stream: Object {
         return formatDescription
     }()
 
+    lazy var clock: CFTypeRef? = {
+        var clock = UnsafeMutablePointer<Unmanaged<CFTypeRef>?>.allocate(capacity: 1)
+
+        let err = CMIOStreamClockCreate(
+            kCFAllocatorDefault,
+            "SimpleDALPlugin clock" as CFString,
+            Unmanaged.passUnretained(self).toOpaque(),
+            CMTimeMake(value: 1, timescale: 10),
+            100, 10,
+            clock);
+        guard err == noErr else {
+            log("CMIOStreamClockCreate Error: \(err)")
+            return nil
+        }
+        return clock.pointee?.takeUnretainedValue()
+    }()
+
     lazy var properties: [Int : Property] = [
         kCMIOObjectPropertyName: Property(name),
         kCMIOStreamPropertyFormatDescription: Property(formatDescription!),
         kCMIOStreamPropertyDirection: Property(UInt32(0)),
         kCMIOStreamPropertyFrameRate: Property(Float64(30)),
+        kCMIOStreamPropertyClock: Property(CFTypeRefWrapper(ref: clock!)),
     ]
 }
