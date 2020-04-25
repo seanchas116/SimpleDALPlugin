@@ -13,6 +13,8 @@ class Stream: Object {
     let name = "SimpleDALPlugin"
     let width = 1280
     let height = 720
+
+    private var timer: Timer?
     private var sequenceNumber: UInt64 = 0
     private var queueAlteredProc: CMIODeviceStreamQueueAlteredProc?
     private var queueAlteredRefCon: UnsafeMutableRawPointer?
@@ -69,6 +71,16 @@ class Stream: Object {
         kCMIOStreamPropertyFrameRate: Property(Float64(30)),
         kCMIOStreamPropertyClock: Property(CFTypeRefWrapper(ref: clock!)),
     ]
+
+    func start() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
+            self?.enqueueBuffer()
+        }
+    }
+
+    func stop() {
+        timer = nil
+    }
 
     func createPixelBuffer() -> CVPixelBuffer? {
         let pixelBuffer = CVPixelBuffer.create(size: CGSize(width: width, height: height))
