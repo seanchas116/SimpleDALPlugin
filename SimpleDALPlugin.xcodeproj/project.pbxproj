@@ -6,9 +6,15 @@
 	objectVersion = 50;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		BEF5B53A2453D9CA00E7FC18 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B5392453D9CA00E7FC18 /* Main.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		BEF5B52F2453D9B300E7FC18 /* SimpleDALPlugin.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleDALPlugin.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEF5B5322453D9B300E7FC18 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BEF5B5382453D9CA00E7FC18 /* SimpleDALPlugin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimpleDALPlugin-Bridging-Header.h"; sourceTree = "<group>"; };
+		BEF5B5392453D9CA00E7FC18 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +48,8 @@
 			isa = PBXGroup;
 			children = (
 				BEF5B5322453D9B300E7FC18 /* Info.plist */,
+				BEF5B5392453D9CA00E7FC18 /* Main.swift */,
+				BEF5B5382453D9CA00E7FC18 /* SimpleDALPlugin-Bridging-Header.h */,
 			);
 			path = SimpleDALPlugin;
 			sourceTree = "<group>";
@@ -77,6 +85,7 @@
 				TargetAttributes = {
 					BEF5B52E2453D9B300E7FC18 = {
 						CreatedOnToolsVersion = 11.4.1;
+						LastSwiftMigration = 1140;
 					};
 				};
 			};
@@ -113,6 +122,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEF5B53A2453D9CA00E7FC18 /* Main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,14 +241,23 @@
 		BEF5B5362453D9B300E7FC18 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = Y98WFXTSVC;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SimpleDALPlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.seanchas116.SimpleDALPlugin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "SimpleDALPlugin/SimpleDALPlugin-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = plugin;
 			};
 			name = Debug;
@@ -246,14 +265,22 @@
 		BEF5B5372453D9B300E7FC18 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = Y98WFXTSVC;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SimpleDALPlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.seanchas116.SimpleDALPlugin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "SimpleDALPlugin/SimpleDALPlugin-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = plugin;
 			};
 			name = Release;
