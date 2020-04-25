@@ -20,6 +20,8 @@ class Device: Object {
         kCMIODevicePropertyDeviceUID: Property(deviceUID),
         kCMIODevicePropertyTransportType: Property(UInt32(kIOAudioDeviceTransportTypeBuiltIn)),
         kCMIODevicePropertyDeviceIsRunningSomewhere: Property(UInt32(1)),
+        kCMIODevicePropertyDeviceCanBeDefaultDevice: Property(UInt32(1)),
+        kCMIOStreamPropertyDirection: Property(UInt32(0)),
         kCMIODevicePropertyStreams: Property { [unowned self] in self.streamID },
     ]
 }
