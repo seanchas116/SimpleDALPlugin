@@ -17,8 +17,13 @@ func simpleDALPluginMain(allocator: CFAllocator, requestedTypeUUID: CFUUID) -> P
 
     var interface = CMIOHardwarePlugInInterface()
 
+    let interfacePtr = UnsafeMutablePointer<CMIOHardwarePlugInInterface>.allocate(capacity: 1)
+    interfacePtr.pointee = interface
+
     let pluginRef = PluginRef.allocate(capacity: 1)
-    pluginRef.pointee.initialize(to: interface)
+    pluginRef.pointee = interfacePtr
+
+    NSLog("pluginRef")
 
     return pluginRef
 }
