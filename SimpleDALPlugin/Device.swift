@@ -13,13 +13,17 @@ class Device: Object {
     var objectID: CMIOObjectID = 0
     var streamID: CMIOStreamID = 0
     let name = "SimpleDALPlugin"
+    let manufacturer = "seanchas116"
     let deviceUID = "SimpleDALPlugin Device"
+    let modelUID = "SimpleDALPlugin Model"
     var excludeNonDALAccess: Bool = false
     var deviceMaster: Int32 = -1
 
     lazy var properties: [Int : Property] = [
         kCMIOObjectPropertyName: Property(name),
+        kCMIOObjectPropertyManufacturer: Property(manufacturer),
         kCMIODevicePropertyDeviceUID: Property(deviceUID),
+        kCMIODevicePropertyModelUID: Property(modelUID),
         kCMIODevicePropertyTransportType: Property(UInt32(kIOAudioDeviceTransportTypeBuiltIn)),
         kCMIODevicePropertyDeviceIsAlive: Property(UInt32(1)),
         kCMIODevicePropertyDeviceIsRunning: Property(UInt32(1)),
