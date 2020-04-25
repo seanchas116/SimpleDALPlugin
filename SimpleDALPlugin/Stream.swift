@@ -70,6 +70,9 @@ class Stream: Object {
         kCMIOStreamPropertyFormatDescriptions: Property([formatDescription!] as CFArray),
         kCMIOStreamPropertyDirection: Property(UInt32(0)),
         kCMIOStreamPropertyFrameRate: Property(Float64(30)),
+        kCMIOStreamPropertyFrameRates: Property(Float64(30)),
+        kCMIOStreamPropertyMinimumFrameRate: Property(Float64(30)),
+        kCMIOStreamPropertyFrameRateRanges: Property(AudioValueRange(mMinimum: 30, mMaximum: 30)),
         kCMIOStreamPropertyClock: Property(CFTypeRefWrapper(ref: clock!)),
     ]
 

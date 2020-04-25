@@ -107,6 +107,18 @@ extension Float64: PropertyValue {
     }
 }
 
+extension AudioValueRange: PropertyValue {
+    var dataSize: UInt32 {
+        return UInt32(MemoryLayout<AudioValueRange>.size)
+    }
+    func toData(data: UnsafeMutableRawPointer) {
+        UnsafeMutablePointer<AudioValueRange>(OpaquePointer(data)).pointee = self
+    }
+    static func fromData(data: UnsafeRawPointer) -> Self {
+        return UnsafePointer<AudioValueRange>(OpaquePointer(data)).pointee
+    }
+}
+
 class Property {
     let getter: () -> PropertyValue
     let setter: ((UnsafeRawPointer) -> Void)?
