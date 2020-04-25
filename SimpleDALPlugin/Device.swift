@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import IOKit
 
 class Device: Object {
     var objectID: CMIOObjectID = 0
     let name = "SimpleDALPlugin"
+    let deviceUID = "SimpleDALPlugin Device"
 
     func hasProperty(address: CMIOObjectPropertyAddress) -> Bool {
         switch (Int(address.mSelector)) {
@@ -30,6 +32,10 @@ class Device: Object {
         switch (Int(address.mSelector)) {
         case kCMIOObjectPropertyName:
             return String.dataSize
+        case kCMIODevicePropertyDeviceUID:
+            return String.dataSize
+        case kCMIODevicePropertyTransportType:
+            return UInt32.dataSize
         default:
             return 0
         }
@@ -41,6 +47,10 @@ class Device: Object {
         switch (Int(address.mSelector)) {
         case kCMIOObjectPropertyName:
             name.toData(data: data)
+        case kCMIODevicePropertyDeviceUID:
+            deviceUID.toData(data: data)
+        case kCMIODevicePropertyTransportType:
+            UInt32(kIOAudioDeviceTransportTypeBuiltIn).toData(data: data)
         default: break
         }
     }

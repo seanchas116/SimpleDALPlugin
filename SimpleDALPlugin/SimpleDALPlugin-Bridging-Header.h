@@ -3,3 +3,4 @@
 //
 
 #import <CoreMediaIO/CMIOHardwarePlugin.h>
+#import <IOKit/audio/IOAudioTypes.h>

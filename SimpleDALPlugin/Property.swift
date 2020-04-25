@@ -33,3 +33,12 @@ extension CMFormatDescription: PropertyValue {
         UnsafeMutablePointer<Unmanaged<Self>>(OpaquePointer(data)).pointee = unmanaged
     }
 }
+
+extension UInt32: PropertyValue {
+    static var dataSize: UInt32 {
+        return UInt32(MemoryLayout<UInt32>.size)
+    }
+    func toData(data: UnsafeMutableRawPointer) {
+        UnsafeMutablePointer<UInt32>(OpaquePointer(data)).pointee = self
+    }
+}
