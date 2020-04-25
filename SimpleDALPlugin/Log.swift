@@ -8,6 +8,6 @@
 
 import Foundation
 
-func log(message: Any = "", function: String = #function) {
-    NSLog("\(function): \(message)")
+func log(_ message: Any = "", function: String = #function) {
+    NSLog("SimpleDALPlugin: \(function): \(message)")
 }
