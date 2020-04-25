@@ -67,7 +67,7 @@ class Stream: Object {
     lazy var properties: [Int : Property] = [
         kCMIOObjectPropertyName: Property(name),
         kCMIOStreamPropertyFormatDescription: Property(formatDescription!),
-        kCMIOStreamPropertyFormatDescriptions: Property([formatDescription!]),
+        kCMIOStreamPropertyFormatDescriptions: Property([formatDescription!] as CFArray),
         kCMIOStreamPropertyDirection: Property(UInt32(0)),
         kCMIOStreamPropertyFrameRate: Property(Float64(30)),
         kCMIOStreamPropertyClock: Property(CFTypeRefWrapper(ref: clock!)),

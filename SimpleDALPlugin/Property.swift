@@ -41,6 +41,19 @@ extension CMFormatDescription: PropertyValue {
     }
 }
 
+extension CFArray: PropertyValue {
+    var dataSize: UInt32 {
+        return UInt32(MemoryLayout<Self>.size)
+    }
+    func toData(data: UnsafeMutableRawPointer) {
+        let unmanaged = Unmanaged<Self>.passRetained(self as! Self)
+        UnsafeMutablePointer<Unmanaged<Self>>(OpaquePointer(data)).pointee = unmanaged
+    }
+    static func fromData(data: UnsafeRawPointer) -> Self {
+        fatalError("not implemented")
+    }
+}
+
 struct CFTypeRefWrapper {
     let ref: CFTypeRef
 }
@@ -91,21 +104,6 @@ extension Float64: PropertyValue {
     }
     static func fromData(data: UnsafeRawPointer) -> Self {
         return UnsafePointer<Float64>(OpaquePointer(data)).pointee
-    }
-}
-
-extension Array: PropertyValue where Element: PropertyValue {
-    var dataSize: UInt32 {
-        return UInt32(MemoryLayout<Element>.size * count)
-    }
-    func toData(data: UnsafeMutableRawPointer) {
-        for i in 0 ..< count {
-            let elemPtr = data.advanced(by: Int(dataSize) * i)
-            self[i].toData(data: elemPtr)
-        }
-    }
-    static func fromData(data: UnsafeRawPointer) -> Self {
-        fatalError("not implemented")
     }
 }
 
