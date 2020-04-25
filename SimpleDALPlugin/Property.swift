@@ -141,7 +141,7 @@ class Property {
 
     init<Element: PropertyValue>(getter: @escaping () -> Element, setter: ((Element) -> Void)?) {
         self.getter = getter
-        self.setter = { data in setter?(Element.fromData(data: data)) }
+        self.setter = (setter != nil) ? { data in setter?(Element.fromData(data: data)) } : nil
     }
 
     func getData(data: UnsafeMutableRawPointer) {
