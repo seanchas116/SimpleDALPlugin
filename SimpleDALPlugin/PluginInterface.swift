@@ -13,28 +13,32 @@ typealias PluginRef = UnsafeMutablePointer<UnsafeMutablePointer<CMIOHardwarePlug
 private var refCount: ULONG = 0
 
 private func QueryInterface(plugin: UnsafeMutableRawPointer?, uuid: REFIID, interface: UnsafeMutablePointer<LPVOID?>?) -> HRESULT {
-    log("QueryInterface")
+    log()
     let pluginRefPtr = UnsafeMutablePointer<PluginRef?>(OpaquePointer(interface))
     pluginRefPtr?.pointee = pluginRef
     refCount += 1
     return HRESULT(noErr)
 }
+
 private func AddRef(plugin: UnsafeMutableRawPointer?) -> ULONG {
-    log("AddRef")
+    log()
     refCount += 1
     return refCount
 }
+
 private func Release(plugin: UnsafeMutableRawPointer?) -> ULONG {
-    log("Release")
+    log()
     refCount -= 1
     return 0
 }
+
 private func Initialize(plugin: CMIOHardwarePlugInRef?) -> OSStatus {
-    log("Initialize")
+    log()
     return OSStatus(kCMIOHardwareIllegalOperationError)
 }
+
 private func InitializeWithObjectID(plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID) -> OSStatus {
-    log("InitializeWithObjectID")
+    log()
     guard let plugin = plugin else {
         return OSStatus(kCMIOHardwareIllegalOperationError)
     }
@@ -78,15 +82,15 @@ private func InitializeWithObjectID(plugin: CMIOHardwarePlugInRef?, objectID: CM
     return noErr
 }
 private func Teardown(plugin: CMIOHardwarePlugInRef?) -> OSStatus {
-    log("Teardown")
+    log()
     return noErr
 }
 private func ObjectShow(plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID) {
-    log("ObjectShow")
+    log()
 }
 
 private func ObjectHasProperty(plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?) -> DarwinBoolean {
-    log("ObjectHasProperty: \(address?.pointee.mSelector)")
+    log(address?.pointee.mSelector)
     guard let address = address?.pointee else {
         log("Address is nil")
         return false
@@ -99,7 +103,7 @@ private func ObjectHasProperty(plugin: CMIOHardwarePlugInRef?, objectID: CMIOObj
 }
 
 private func ObjectIsPropertySettable(plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?, isSettable: UnsafeMutablePointer<DarwinBoolean>?) -> OSStatus {
-    log("ObjectIsPropertySettable: \(address?.pointee.mSelector)")
+    log(address?.pointee.mSelector)
     guard let address = address?.pointee else {
         log("Address is nil")
         return OSStatus(kCMIOHardwareBadObjectError)
@@ -114,7 +118,7 @@ private func ObjectIsPropertySettable(plugin: CMIOHardwarePlugInRef?, objectID: 
 }
 
 private func ObjectGetPropertyDataSize(plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?, qualifiedDataSize: UInt32, qualifiedData: UnsafeRawPointer?, dataSize: UnsafeMutablePointer<UInt32>?) -> OSStatus {
-    log("ObjectGetPropertyDataSize")
+    log(address?.pointee.mSelector)
     guard let address = address?.pointee else {
         log("Address is nil")
         return OSStatus(kCMIOHardwareBadObjectError)
@@ -128,7 +132,7 @@ private func ObjectGetPropertyDataSize(plugin: CMIOHardwarePlugInRef?, objectID:
 }
 
 private func ObjectGetPropertyData(plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?, qualifiedDataSize: UInt32, qualifiedData: UnsafeRawPointer?, dataSize: UInt32, dataUsed: UnsafeMutablePointer<UInt32>?, data: UnsafeMutableRawPointer?) -> OSStatus {
-    log("ObjectGetPropertyData: \(address?.pointee.mSelector)")
+    log(address?.pointee.mSelector)
     guard let address = address?.pointee else {
         log("Address is nil")
         return OSStatus(kCMIOHardwareBadObjectError)
@@ -148,7 +152,7 @@ private func ObjectGetPropertyData(plugin: CMIOHardwarePlugInRef?, objectID: CMI
 }
 
 private func ObjectSetPropertyData(plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?, qualifiedDataSize: UInt32, qualifiedData: UnsafeRawPointer?, dataSize: UInt32, data: UnsafeRawPointer?) -> OSStatus {
-    log("ObjectSetPropertyData")
+    log()
 
     guard let address = address?.pointee else {
         log("Address is nil")
@@ -167,17 +171,17 @@ private func ObjectSetPropertyData(plugin: CMIOHardwarePlugInRef?, objectID: CMI
 }
 
 private func DeviceSuspend(plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID) -> OSStatus {
-    log("DeviceSuspend")
+    log()
     return noErr
 }
 
 private func DeviceResume(plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID) -> OSStatus {
-    log("DeviceResume")
+    log()
     return noErr
 }
 
 private func DeviceStartStream(plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID, streamID: CMIOStreamID) -> OSStatus {
-    log("DeviceStartStream")
+    log()
     guard let stream = objects[streamID] as? Stream else {
         log("no stream")
         return OSStatus(kCMIOHardwareBadObjectError)
@@ -187,7 +191,7 @@ private func DeviceStartStream(plugin: CMIOHardwarePlugInRef?, deviceID: CMIODev
 }
 
 private func DeviceStopStream(plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID, streamID: CMIOStreamID) -> OSStatus {
-    log("DeviceStopStream")
+    log()
     guard let stream = objects[streamID] as? Stream else {
         log("no stream")
         return OSStatus(kCMIOHardwareBadObjectError)
@@ -197,17 +201,17 @@ private func DeviceStopStream(plugin: CMIOHardwarePlugInRef?, deviceID: CMIODevi
 }
 
 private func DeviceProcessAVCCommand(plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID, avcCommand: UnsafeMutablePointer<CMIODeviceAVCCommand>?) -> OSStatus {
-    log("DeviceProcessAVCCommand")
+    log()
     return OSStatus(kCMIOHardwareIllegalOperationError)
 }
 
 private func DeviceProcessRS422Command(plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID, rs422Command: UnsafeMutablePointer<CMIODeviceRS422Command>?) -> OSStatus {
-    log("DeviceProcessRS422Command")
+    log()
     return OSStatus(kCMIOHardwareIllegalOperationError)
 }
 
 private func StreamCopyBufferQueue(plugin: CMIOHardwarePlugInRef?, streamID: CMIOStreamID, queueAlteredProc: CMIODeviceStreamQueueAlteredProc?, queueAlteredRefCon: UnsafeMutableRawPointer?, queueOut: UnsafeMutablePointer<Unmanaged<CMSimpleQueue>?>?) -> OSStatus {
-    log("StreamCopyBufferQueue")
+    log()
     guard let queueOut = queueOut else {
         log("no queueOut")
         return OSStatus(kCMIOHardwareBadObjectError)
@@ -229,19 +233,22 @@ private func StreamCopyBufferQueue(plugin: CMIOHardwarePlugInRef?, streamID: CMI
 }
 
 private func StreamDeckPlay(plugin: CMIOHardwarePlugInRef?, streamID: CMIOStreamID) -> OSStatus {
-    log("StreamDeckPlay")
+    log()
     return OSStatus(kCMIOHardwareIllegalOperationError)
 }
+
 private func StreamDeckStop(plugin: CMIOHardwarePlugInRef?, streamID: CMIOStreamID) -> OSStatus {
-    log("StreamDeckStop")
+    log()
     return OSStatus(kCMIOHardwareIllegalOperationError)
 }
+
 private func StreamDeckJog(plugin: CMIOHardwarePlugInRef?, streamID: CMIOStreamID, speed: Int32) -> OSStatus {
-    log("StreamDeckJog")
+    log()
     return OSStatus(kCMIOHardwareIllegalOperationError)
 }
+
 private func StreamDeckCueTo(plugin: CMIOHardwarePlugInRef?, streamID: CMIOStreamID, requestedTimecode: Float64, playOnCue: DarwinBoolean) -> OSStatus {
-    log("StreamDeckCueTo")
+    log()
     return OSStatus(kCMIOHardwareIllegalOperationError)
 }
 
