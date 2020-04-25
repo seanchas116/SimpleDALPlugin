@@ -118,16 +118,17 @@ class Stream: Object {
             return
         }
 
+        let currentTimeNsec = mach_absolute_time()
+
         var timing = CMSampleTimingInfo(
-            duration: CMTime(value: 1000, timescale: 1000 * 30),
-            presentationTimeStamp: CMTime(value: CMTimeValue(mach_absolute_time()), timescale: CMTimeScale(1000_000_000)),
+            duration: CMTime(value: 1, timescale: 30),
+            presentationTimeStamp: CMTime(value: CMTimeValue(currentTimeNsec), timescale: CMTimeScale(1000_000_000)),
             decodeTimeStamp: .invalid
         )
 
         var error = noErr
 
-        error = CMIOStreamClockPostTimingEvent(
-            timing.presentationTimeStamp, mach_absolute_time(), true, self.clock)
+        error = CMIOStreamClockPostTimingEvent(timing.presentationTimeStamp, currentTimeNsec, true, self.clock)
         guard error == noErr else {
             log("CMSimpleQueueCreate Error: \(error)")
             return
