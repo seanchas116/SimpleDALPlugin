@@ -13,6 +13,9 @@ class Stream: Object {
     let name = "SimpleDALPlugin"
     let width = 1280
     let height = 720
+    private var sequenceNumber: UInt64 = 0
+    private var queueAlteredProc: CMIODeviceStreamQueueAlteredProc?
+    private var queueAlteredRefCon: UnsafeMutableRawPointer?
 
     lazy var formatDescription: CMVideoFormatDescription? = {
         var formatDescription: CMVideoFormatDescription?
@@ -66,4 +69,67 @@ class Stream: Object {
         kCMIOStreamPropertyFrameRate: Property(Float64(30)),
         kCMIOStreamPropertyClock: Property(CFTypeRefWrapper(ref: clock!)),
     ]
+
+    func createPixelBuffer() -> CVPixelBuffer {
+        fatalError("TODO")
+    }
+
+    func enqueueBuffer() {
+        guard let queue = queue else {
+            log("queue is nil")
+            return
+        }
+
+        guard CMSimpleQueueGetCount(queue) < CMSimpleQueueGetCapacity(queue) else {
+            log("queue is full")
+            return
+        }
+
+        var timing = CMSampleTimingInfo(
+            duration: CMTime(value: 1000, timescale: 1000 * 30),
+            presentationTimeStamp: CMTime(value: CMTimeValue(mach_absolute_time()), timescale: CMTimeScale(1000_000_000)),
+            decodeTimeStamp: .invalid
+        )
+
+        var error = noErr
+
+        error = CMIOStreamClockPostTimingEvent(
+            timing.presentationTimeStamp, mach_absolute_time(), true, self.clock)
+        guard error == noErr else {
+            log("CMSimpleQueueCreate Error: \(error)")
+            return
+        }
+
+        let pixelBuffer = createPixelBuffer()
+
+        var formatDescription: CMFormatDescription?
+        error = CMVideoFormatDescriptionCreateForImageBuffer(
+            allocator: kCFAllocatorDefault,
+            imageBuffer: pixelBuffer,
+            formatDescriptionOut: &formatDescription)
+        guard error == noErr else {
+            log("CMVideoFormatDescriptionCreateForImageBuffer Error: \(error)")
+            return
+        }
+
+        sequenceNumber += 1
+
+        let sampleBufferPtr = UnsafeMutablePointer<Unmanaged<CMSampleBuffer>?>.allocate(capacity: 1)
+        error = CMIOSampleBufferCreateForImageBuffer(
+            kCFAllocatorDefault,
+            pixelBuffer,
+            formatDescription,
+            &timing,
+            sequenceNumber,
+            UInt32(kCMIOSampleBufferNoDiscontinuities),
+            sampleBufferPtr
+        )
+        guard error == noErr else {
+            log("CMIOSampleBufferCreateForImageBuffer Error: \(error)")
+            return
+        }
+
+        CMSimpleQueueEnqueue(queue, element: sampleBufferPtr)
+        queueAlteredProc?(objectID, sampleBufferPtr, queueAlteredRefCon)
+    }
 }
