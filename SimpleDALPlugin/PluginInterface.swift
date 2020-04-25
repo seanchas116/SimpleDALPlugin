@@ -102,7 +102,7 @@ func createPluginInterface() -> CMIOHardwarePlugInInterface {
         },
 
         ObjectIsPropertySettable: { (plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?, isSettable: UnsafeMutablePointer<DarwinBoolean>?) -> OSStatus in
-            log("ObjectIsPropertySettable")
+            log("ObjectIsPropertySettable: \(address?.pointee.mSelector)")
             guard let address = address?.pointee else {
                 log("Address is nil")
                 return OSStatus(kCMIOHardwareIllegalOperationError)
