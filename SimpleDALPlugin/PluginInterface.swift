@@ -73,26 +73,89 @@ func createPluginInterface() -> CMIOHardwarePlugInInterface {
         ObjectShow: { (plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID) in
             log("ObjectShow")
         },
+
         ObjectHasProperty: { (plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?) -> DarwinBoolean in
             log("ObjectHasProperty")
-            return false
+            guard let address = address?.pointee else {
+                log("Address is nil")
+                return false
+            }
+            guard let object = objects[objectID] else {
+                log("Object not found")
+                return false
+            }
+            return DarwinBoolean(object.hasProperty(address: address))
         },
+
         ObjectIsPropertySettable: { (plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?, isSettable: UnsafeMutablePointer<DarwinBoolean>?) -> OSStatus in
             log("ObjectIsPropertySettable")
-            return OSStatus(kCMIOHardwareIllegalOperationError)
+            guard let address = address?.pointee else {
+                log("Address is nil")
+                return OSStatus(kCMIOHardwareIllegalOperationError)
+            }
+            guard let object = objects[objectID] else {
+                log("Object not found")
+                return OSStatus(kCMIOHardwareIllegalOperationError)
+            }
+            let settable = object.isPropertySettable(address: address)
+            isSettable?.pointee = DarwinBoolean(settable)
+            return OSStatus(kCMIOHardwareNoError)
         },
+
         ObjectGetPropertyDataSize: { (plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?, qualifiedDataSize: UInt32, qualifiedData: UnsafeRawPointer?, dataSize: UnsafeMutablePointer<UInt32>?) -> OSStatus in
             log("ObjectGetPropertyDataSize")
-            return OSStatus(kCMIOHardwareIllegalOperationError)
+            guard let address = address?.pointee else {
+                log("Address is nil")
+                return OSStatus(kCMIOHardwareIllegalOperationError)
+            }
+            guard let object = objects[objectID] else {
+                log("Object not found")
+                return OSStatus(kCMIOHardwareIllegalOperationError)
+            }
+            dataSize?.pointee = object.getPropertyDataSize(address: address)
+            return OSStatus(kCMIOHardwareNoError)
         },
+
         ObjectGetPropertyData: { (plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?, qualifiedDataSize: UInt32, qualifiedData: UnsafeRawPointer?, dataSize: UInt32, dataUsed: UnsafeMutablePointer<UInt32>?, data: UnsafeMutableRawPointer?) -> OSStatus in
             log("ObjectGetPropertyData")
-            return OSStatus(kCMIOHardwareIllegalOperationError)
+            log("ObjectGetPropertyDataSize")
+            guard let address = address?.pointee else {
+                log("Address is nil")
+                return OSStatus(kCMIOHardwareIllegalOperationError)
+            }
+            guard let object = objects[objectID] else {
+                log("Object not found")
+                return OSStatus(kCMIOHardwareIllegalOperationError)
+            }
+            guard let data = data else {
+                log("data is nil")
+                return OSStatus(kCMIOHardwareIllegalOperationError)
+            }
+            var dataUsed_: UInt32 = 0
+            object.getPropertyData(address: address, dataSize: &dataUsed_, data: data)
+            dataUsed?.pointee = dataUsed_
+            return OSStatus(kCMIOHardwareNoError)
         },
+
         ObjectSetPropertyData: { (plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?, qualifiedDataSize: UInt32, qualifiedData: UnsafeRawPointer?, dataSize: UInt32, data: UnsafeRawPointer?) -> OSStatus in
             log("ObjectSetPropertyData")
-            return OSStatus(kCMIOHardwareIllegalOperationError)
+
+            guard let address = address?.pointee else {
+                log("Address is nil")
+                return OSStatus(kCMIOHardwareIllegalOperationError)
+            }
+            guard let object = objects[objectID] else {
+                log("Object not found")
+                return OSStatus(kCMIOHardwareIllegalOperationError)
+            }
+            guard let data = data else {
+                log("data is nil")
+                return OSStatus(kCMIOHardwareIllegalOperationError)
+            }
+            object.setPropertyData(address: address, data: data)
+            return OSStatus(kCMIOHardwareNoError)
         },
+
         DeviceSuspend: { (plugin: CMIOHardwarePlugInRef?, deviceID: CMIODeviceID) -> OSStatus in
             log("DeviceSuspend")
             return OSStatus(kCMIOHardwareIllegalOperationError)
