@@ -32,5 +32,7 @@ class Stream: Object {
     lazy var properties: [Int : Property] = [
         kCMIOObjectPropertyName: Property(name),
         kCMIOStreamPropertyFormatDescription: Property(formatDescription!),
+        kCMIOStreamPropertyDirection: Property(UInt32(0)),
+        kCMIOStreamPropertyFrameRate: Property(Float64(30)),
     ]
 }

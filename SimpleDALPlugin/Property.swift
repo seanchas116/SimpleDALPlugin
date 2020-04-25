@@ -52,6 +52,15 @@ extension Int32: PropertyValue {
     }
 }
 
+extension Float64: PropertyValue {
+    var dataSize: UInt32 {
+        return UInt32(MemoryLayout<Float64>.size)
+    }
+    func toData(data: UnsafeMutableRawPointer) {
+        UnsafeMutablePointer<Float64>(OpaquePointer(data)).pointee = self
+    }
+}
+
 class Property {
     let getter: () -> PropertyValue
     let isSettable = false
