@@ -9,12 +9,12 @@
 import Foundation
 
 protocol PropertyValue {
-    static var dataSize: UInt32 { get }
+    var dataSize: UInt32 { get }
     func toData(data: UnsafeMutableRawPointer)
 }
 
 extension String: PropertyValue {
-    static var dataSize: UInt32 {
+    var dataSize: UInt32 {
         return UInt32(MemoryLayout<CFString>.size)
     }
     func toData(data: UnsafeMutableRawPointer) {
@@ -25,7 +25,7 @@ extension String: PropertyValue {
 }
 
 extension CMFormatDescription: PropertyValue {
-    static var dataSize: UInt32 {
+    var dataSize: UInt32 {
         return UInt32(MemoryLayout<Self>.size)
     }
     func toData(data: UnsafeMutableRawPointer) {
@@ -35,10 +35,35 @@ extension CMFormatDescription: PropertyValue {
 }
 
 extension UInt32: PropertyValue {
-    static var dataSize: UInt32 {
+    var dataSize: UInt32 {
         return UInt32(MemoryLayout<UInt32>.size)
     }
     func toData(data: UnsafeMutableRawPointer) {
         UnsafeMutablePointer<UInt32>(OpaquePointer(data)).pointee = self
+    }
+}
+
+class Property {
+    let getter: () -> PropertyValue
+    let isSettable = false
+
+    var dataSize: UInt32 {
+        getter().dataSize
+    }
+
+    convenience init(_ value: PropertyValue) {
+        self.init(getter: { value })
+    }
+
+    init(getter: @escaping () -> PropertyValue) {
+        self.getter = getter
+    }
+
+    func getData(data: UnsafeMutableRawPointer) {
+        let value = getter()
+        value.toData(data: data)
+    }
+    func setData(data: UnsafeRawPointer) {
+        // TODO
     }
 }
