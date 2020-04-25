@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BEF5B53A2453D9CA00E7FC18 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B5392453D9CA00E7FC18 /* Main.swift */; };
 		BEF5B53D2453DFA200E7FC18 /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEF5B53C2453DFA200E7FC18 /* CoreMediaIO.framework */; };
+		BEF5B53F2453E8F500E7FC18 /* PluginInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B53E2453E8F500E7FC18 /* PluginInterface.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -17,6 +18,7 @@
 		BEF5B5382453D9CA00E7FC18 /* SimpleDALPlugin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimpleDALPlugin-Bridging-Header.h"; sourceTree = "<group>"; };
 		BEF5B5392453D9CA00E7FC18 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		BEF5B53C2453DFA200E7FC18 /* CoreMediaIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMediaIO.framework; path = System/Library/Frameworks/CoreMediaIO.framework; sourceTree = SDKROOT; };
+		BEF5B53E2453E8F500E7FC18 /* PluginInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginInterface.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 			children = (
 				BEF5B5322453D9B300E7FC18 /* Info.plist */,
 				BEF5B5392453D9CA00E7FC18 /* Main.swift */,
+				BEF5B53E2453E8F500E7FC18 /* PluginInterface.swift */,
 				BEF5B5382453D9CA00E7FC18 /* SimpleDALPlugin-Bridging-Header.h */,
 			);
 			path = SimpleDALPlugin;
@@ -134,6 +137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEF5B53F2453E8F500E7FC18 /* PluginInterface.swift in Sources */,
 				BEF5B53A2453D9CA00E7FC18 /* Main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
