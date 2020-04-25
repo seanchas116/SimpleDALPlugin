@@ -11,6 +11,7 @@
 		BEF5B53D2453DFA200E7FC18 /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEF5B53C2453DFA200E7FC18 /* CoreMediaIO.framework */; };
 		BEF5B53F2453E8F500E7FC18 /* PluginInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B53E2453E8F500E7FC18 /* PluginInterface.swift */; };
 		BEF5B5412453F50000E7FC18 /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B5402453F50000E7FC18 /* Object.swift */; };
+		BEF5B5432453FE5D00E7FC18 /* Plugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B5422453FE5D00E7FC18 /* Plugin.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		BEF5B53C2453DFA200E7FC18 /* CoreMediaIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMediaIO.framework; path = System/Library/Frameworks/CoreMediaIO.framework; sourceTree = SDKROOT; };
 		BEF5B53E2453E8F500E7FC18 /* PluginInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginInterface.swift; sourceTree = "<group>"; };
 		BEF5B5402453F50000E7FC18 /* Object.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Object.swift; sourceTree = "<group>"; };
+		BEF5B5422453FE5D00E7FC18 /* Plugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plugin.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 				BEF5B53E2453E8F500E7FC18 /* PluginInterface.swift */,
 				BEF5B5382453D9CA00E7FC18 /* SimpleDALPlugin-Bridging-Header.h */,
 				BEF5B5402453F50000E7FC18 /* Object.swift */,
+				BEF5B5422453FE5D00E7FC18 /* Plugin.swift */,
 			);
 			path = SimpleDALPlugin;
 			sourceTree = "<group>";
@@ -142,6 +145,7 @@
 			files = (
 				BEF5B53F2453E8F500E7FC18 /* PluginInterface.swift in Sources */,
 				BEF5B5412453F50000E7FC18 /* Object.swift in Sources */,
+				BEF5B5432453FE5D00E7FC18 /* Plugin.swift in Sources */,
 				BEF5B53A2453D9CA00E7FC18 /* Main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
