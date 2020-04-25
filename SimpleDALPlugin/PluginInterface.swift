@@ -10,25 +10,20 @@ import Foundation
 
 typealias PluginRef = UnsafeMutablePointer<UnsafeMutablePointer<CMIOHardwarePlugInInterface>>
 
-private var refCount: ULONG = 0
-
 private func QueryInterface(plugin: UnsafeMutableRawPointer?, uuid: REFIID, interface: UnsafeMutablePointer<LPVOID?>?) -> HRESULT {
     log()
     let pluginRefPtr = UnsafeMutablePointer<PluginRef?>(OpaquePointer(interface))
     pluginRefPtr?.pointee = pluginRef
-    refCount += 1
     return HRESULT(noErr)
 }
 
 private func AddRef(plugin: UnsafeMutableRawPointer?) -> ULONG {
     log()
-    refCount += 1
-    return refCount
+    return 0
 }
 
 private func Release(plugin: UnsafeMutableRawPointer?) -> ULONG {
     log()
-    refCount -= 1
     return 0
 }
 
