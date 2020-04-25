@@ -15,3 +15,5 @@ protocol Object: class {
     func getPropertyData(address: CMIOObjectPropertyAddress, out dataSize: UInt32, data: UnsafeMutableRawPointer)
     func setPropertyData(address: CMIOObjectPropertyAddress, data: UnsafeRawPointer)
 }
+
+var objects = [CMIOObjectID: Object]()
