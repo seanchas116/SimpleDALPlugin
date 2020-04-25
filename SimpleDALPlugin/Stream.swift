@@ -89,7 +89,10 @@ class Stream: Object {
     func createPixelBuffer() -> CVPixelBuffer? {
         let pixelBuffer = CVPixelBuffer.create(size: CGSize(width: width, height: height))
         pixelBuffer?.modifyWithContext { [width, height] context in
-            context.setFillColor(CGColor.init(red: 1, green: 0, blue: 0, alpha: 1))
+            let time = Double(mach_absolute_time()) / Double(1000_000_000)
+            let red = time - round(time)
+
+            context.setFillColor(CGColor.init(red: CGFloat(red), green: 0, blue: 0, alpha: 1))
             context.fill(CGRect(x: 0, y: 0, width: width, height: height))
         }
         return pixelBuffer
