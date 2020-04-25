@@ -23,3 +23,13 @@ extension String: PropertyValue {
         UnsafeMutablePointer<Unmanaged<CFString>>(OpaquePointer(data)).pointee = unmanagedCFString
     }
 }
+
+extension CMFormatDescription: PropertyValue {
+    static var dataSize: UInt32 {
+        return UInt32(MemoryLayout<Self>.size)
+    }
+    func toData(data: UnsafeMutableRawPointer) {
+        let unmanaged = Unmanaged<Self>.passRetained(self as! Self)
+        UnsafeMutablePointer<Unmanaged<Self>>(OpaquePointer(data)).pointee = unmanaged
+    }
+}

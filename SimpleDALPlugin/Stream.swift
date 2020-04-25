@@ -11,12 +11,30 @@ import Foundation
 class Stream: Object {
     var objectID: CMIOObjectID = 0
     let name = "SimpleDALPlugin"
+    let width = 1280
+    let height = 720
+
+    var formatDescription: CMVideoFormatDescription? {
+        var formatDescription: CMVideoFormatDescription?
+        let err = CMVideoFormatDescriptionCreate(
+            allocator: kCFAllocatorDefault,
+            codecType: kCMVideoCodecType_422YpCbCr8,
+            width: Int32(width), height: Int32(height),
+            extensions: nil,
+            formatDescriptionOut: &formatDescription)
+        guard err == noErr else {
+            log("CMVideoFormatDescriptionCreate Error: \(err)")
+            return nil
+        }
+        return formatDescription
+    }
 
     func hasProperty(address: CMIOObjectPropertyAddress) -> Bool {
         switch (Int(address.mSelector)) {
         case kCMIOObjectPropertyName:
             return true
-
+        case kCMIOStreamPropertyFormatDescription:
+            return true
         default:
             return false
         }
@@ -30,6 +48,8 @@ class Stream: Object {
         switch (Int(address.mSelector)) {
         case kCMIOObjectPropertyName:
             return String.dataSize
+        case kCMIOStreamPropertyFormatDescription:
+            return CMFormatDescription.dataSize
         default:
             return 0
         }
@@ -41,6 +61,8 @@ class Stream: Object {
         switch (Int(address.mSelector)) {
         case kCMIOObjectPropertyName:
             name.toData(data: data)
+        case kCMIOStreamPropertyFormatDescription:
+            formatDescription?.toData(data: data)
         default: break
         }
     }
