@@ -70,8 +70,13 @@ class Stream: Object {
         kCMIOStreamPropertyClock: Property(CFTypeRefWrapper(ref: clock!)),
     ]
 
-    func createPixelBuffer() -> CVPixelBuffer {
-        fatalError("TODO")
+    func createPixelBuffer() -> CVPixelBuffer? {
+        let pixelBuffer = CVPixelBuffer.create(size: CGSize(width: width, height: height))
+        pixelBuffer?.modifyWithContext { [width, height] context in
+            context.setFillColor(CGColor.init(red: 1, green: 0, blue: 0, alpha: 1))
+            context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+        }
+        return pixelBuffer
     }
 
     func enqueueBuffer() {
@@ -82,6 +87,11 @@ class Stream: Object {
 
         guard CMSimpleQueueGetCount(queue) < CMSimpleQueueGetCapacity(queue) else {
             log("queue is full")
+            return
+        }
+
+        guard let pixelBuffer = createPixelBuffer() else {
+            log("pixelBuffer is nil")
             return
         }
 
@@ -99,8 +109,6 @@ class Stream: Object {
             log("CMSimpleQueueCreate Error: \(error)")
             return
         }
-
-        let pixelBuffer = createPixelBuffer()
 
         var formatDescription: CMFormatDescription?
         error = CMVideoFormatDescriptionCreateForImageBuffer(
