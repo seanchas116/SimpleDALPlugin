@@ -12,4 +12,4 @@ Simple CoreMediaIO DAL virtual camera plugin
 ## References
 
 * [CoreMediaIO-DAL-Example](https://github.com/lvsti/CoreMediaIO-DAL-Example)
-* [johnboiles/coremediaio-dal-minimal-example](https://github.com/johnboiles/coremediaio-dal-minimal-example)
+* [coremediaio-dal-minimal-example](https://github.com/johnboiles/coremediaio-dal-minimal-example)
