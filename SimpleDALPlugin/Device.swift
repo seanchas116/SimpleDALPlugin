@@ -41,7 +41,8 @@ class Device: Object {
         switch (Int(address.mSelector)) {
         case kCMIOObjectPropertyName:
             let cfName = name as CFString
-            UnsafeMutablePointer<CFString>(OpaquePointer(data)).pointee = cfName
+            let unmanagedCFname = Unmanaged<CFString>.passRetained(cfName)
+            UnsafeMutablePointer<Unmanaged<CFString>>(OpaquePointer(data)).pointee = unmanagedCFname
         default: break
         }
     }
