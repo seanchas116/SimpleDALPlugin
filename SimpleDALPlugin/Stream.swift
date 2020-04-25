@@ -29,17 +29,6 @@ class Stream: Object {
         return formatDescription
     }
 
-    func hasProperty(address: CMIOObjectPropertyAddress) -> Bool {
-        switch (Int(address.mSelector)) {
-        case kCMIOObjectPropertyName:
-            return true
-        case kCMIOStreamPropertyFormatDescription:
-            return true
-        default:
-            return false
-        }
-    }
-
     func isPropertySettable(address: CMIOObjectPropertyAddress) -> Bool {
         return false
     }

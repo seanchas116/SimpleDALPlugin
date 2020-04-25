@@ -12,15 +12,6 @@ class Plugin: Object {
     var objectID: CMIOObjectID = 0
     let name = "SimpleDALPlugin"
 
-    func hasProperty(address: CMIOObjectPropertyAddress) -> Bool {
-        switch (Int(address.mSelector)) {
-        case kCMIOObjectPropertyName:
-            return true
-        default:
-            return false
-        }
-    }
-
     func isPropertySettable(address: CMIOObjectPropertyAddress) -> Bool {
         return false
     }

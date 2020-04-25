@@ -10,11 +10,16 @@ import Foundation
 
 protocol Object: class {
     var objectID: CMIOObjectID { get }
-    func hasProperty(address: CMIOObjectPropertyAddress) -> Bool
     func isPropertySettable(address: CMIOObjectPropertyAddress) -> Bool
     func getPropertyDataSize(address: CMIOObjectPropertyAddress) -> UInt32
     func getPropertyData(address: CMIOObjectPropertyAddress, dataSize: inout UInt32, data: UnsafeMutableRawPointer)
     func setPropertyData(address: CMIOObjectPropertyAddress, data: UnsafeRawPointer)
+}
+
+extension Object {
+    func hasProperty(address: CMIOObjectPropertyAddress) -> Bool {
+        return getPropertyDataSize(address: address) != 0
+    }
 }
 
 var objects = [CMIOObjectID: Object]()

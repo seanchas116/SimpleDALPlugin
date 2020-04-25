@@ -15,23 +15,6 @@ class Device: Object {
     let name = "SimpleDALPlugin"
     let deviceUID = "SimpleDALPlugin Device"
 
-    func hasProperty(address: CMIOObjectPropertyAddress) -> Bool {
-        switch (Int(address.mSelector)) {
-        case kCMIOObjectPropertyName:
-            return true
-        case kCMIODevicePropertyDeviceUID:
-            return true
-        case kCMIODevicePropertyTransportType:
-            return true
-        case kCMIODevicePropertyDeviceIsRunningSomewhere:
-            return true
-        case kCMIODevicePropertyStreams:
-            return true
-        default:
-            return false
-        }
-    }
-
     func isPropertySettable(address: CMIOObjectPropertyAddress) -> Bool {
         return false
     }
