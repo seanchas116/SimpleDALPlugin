@@ -13,6 +13,7 @@ class Stream: Object {
     let name = "SimpleDALPlugin"
     let width = 1280
     let height = 720
+    let frameRate = 30
 
     private var timer: Timer?
     private var sequenceNumber: UInt64 = 0
@@ -69,15 +70,15 @@ class Stream: Object {
         kCMIOStreamPropertyFormatDescription: Property(formatDescription!),
         kCMIOStreamPropertyFormatDescriptions: Property([formatDescription!] as CFArray),
         kCMIOStreamPropertyDirection: Property(UInt32(0)),
-        kCMIOStreamPropertyFrameRate: Property(Float64(30)),
-        kCMIOStreamPropertyFrameRates: Property(Float64(30)),
-        kCMIOStreamPropertyMinimumFrameRate: Property(Float64(30)),
-        kCMIOStreamPropertyFrameRateRanges: Property(AudioValueRange(mMinimum: 30, mMaximum: 30)),
+        kCMIOStreamPropertyFrameRate: Property(Float64(frameRate)),
+        kCMIOStreamPropertyFrameRates: Property(Float64(frameRate)),
+        kCMIOStreamPropertyMinimumFrameRate: Property(Float64(frameRate)),
+        kCMIOStreamPropertyFrameRateRanges: Property(AudioValueRange(mMinimum: Float64(frameRate), mMaximum: Float64(frameRate))),
         kCMIOStreamPropertyClock: Property(CFTypeRefWrapper(ref: clock!)),
     ]
 
     func start() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0 / Double(frameRate), repeats: true) { [weak self] _ in
             self?.enqueueBuffer()
         }
     }
@@ -127,7 +128,7 @@ class Stream: Object {
         let currentTimeNsec = mach_absolute_time()
 
         var timing = CMSampleTimingInfo(
-            duration: CMTime(value: 1, timescale: 30),
+            duration: CMTime(value: 1, timescale: CMTimeScale(frameRate)),
             presentationTimeStamp: CMTime(value: CMTimeValue(currentTimeNsec), timescale: CMTimeScale(1000_000_000)),
             decodeTimeStamp: .invalid
         )
