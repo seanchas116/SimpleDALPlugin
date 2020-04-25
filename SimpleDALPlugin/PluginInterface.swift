@@ -118,7 +118,6 @@ func createPluginInterface() -> CMIOHardwarePlugInInterface {
 
         ObjectGetPropertyData: { (plugin: CMIOHardwarePlugInRef?, objectID: CMIOObjectID, address: UnsafePointer<CMIOObjectPropertyAddress>?, qualifiedDataSize: UInt32, qualifiedData: UnsafeRawPointer?, dataSize: UInt32, dataUsed: UnsafeMutablePointer<UInt32>?, data: UnsafeMutableRawPointer?) -> OSStatus in
             log("ObjectGetPropertyData")
-            log("ObjectGetPropertyDataSize")
             guard let address = address?.pointee else {
                 log("Address is nil")
                 return OSStatus(kCMIOHardwareIllegalOperationError)
