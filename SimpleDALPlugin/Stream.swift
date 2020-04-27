@@ -23,7 +23,7 @@ class Stream: Object {
         var formatDescription: CMVideoFormatDescription?
         let error = CMVideoFormatDescriptionCreate(
             allocator: kCFAllocatorDefault,
-            codecType: kCMVideoCodecType_422YpCbCr8,
+            codecType: kCVPixelFormatType_32ARGB,
             width: Int32(width), height: Int32(height),
             extensions: nil,
             formatDescriptionOut: &formatDescription)
