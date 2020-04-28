@@ -35,7 +35,7 @@ class Stream: Object {
     }()
 
     private lazy var clock: CFTypeRef? = {
-        var clock = UnsafeMutablePointer<Unmanaged<CFTypeRef>?>.allocate(capacity: 1)
+        var clock: Unmanaged<CFTypeRef>? = nil
 
         let error = CMIOStreamClockCreate(
             kCFAllocatorDefault,
@@ -43,12 +43,12 @@ class Stream: Object {
             Unmanaged.passUnretained(self).toOpaque(),
             CMTimeMake(value: 1, timescale: 10),
             100, 10,
-            clock);
+            &clock);
         guard error == noErr else {
             log("CMIOStreamClockCreate Error: \(error)")
             return nil
         }
-        return clock.pointee?.takeUnretainedValue()
+        return clock?.takeUnretainedValue()
     }()
 
     private lazy var queue: CMSimpleQueue? = {
@@ -158,7 +158,7 @@ class Stream: Object {
             return
         }
 
-        let sampleBufferPtr = UnsafeMutablePointer<Unmanaged<CMSampleBuffer>?>.allocate(capacity: 1)
+        var sampleBufferUnmanaged: Unmanaged<CMSampleBuffer>? = nil
         error = CMIOSampleBufferCreateForImageBuffer(
             kCFAllocatorDefault,
             pixelBuffer,
@@ -166,15 +166,15 @@ class Stream: Object {
             &timing,
             sequenceNumber,
             UInt32(kCMIOSampleBufferNoDiscontinuities),
-            sampleBufferPtr
+            &sampleBufferUnmanaged
         )
         guard error == noErr else {
             log("CMIOSampleBufferCreateForImageBuffer Error: \(error)")
             return
         }
 
-        CMSimpleQueueEnqueue(queue, element: sampleBufferPtr.pointee!.toOpaque())
-        queueAlteredProc?(objectID, sampleBufferPtr.pointee!.toOpaque(), queueAlteredRefCon)
+        CMSimpleQueueEnqueue(queue, element: sampleBufferUnmanaged!.toOpaque())
+        queueAlteredProc?(objectID, sampleBufferUnmanaged!.toOpaque(), queueAlteredRefCon)
 
         sequenceNumber += 1
     }
