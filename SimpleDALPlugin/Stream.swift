@@ -106,10 +106,10 @@ class Stream: Object {
             let time = Double(mach_absolute_time()) / Double(1000_000_000)
             let pos = CGFloat(time - floor(time))
 
-            context.setFillColor(CGColor.init(red: 1, green: 1, blue: 1, alpha: 1))
+            context.setFillColor(CGColor(red: 1, green: 1, blue: 1, alpha: 1))
             context.fill(CGRect(x: 0, y: 0, width: width, height: height))
 
-            context.setFillColor(CGColor.init(red: 1, green: 0, blue: 0, alpha: 1))
+            context.setFillColor(CGColor(red: 1, green: 0, blue: 0, alpha: 1))
 
             context.fill(CGRect(x: pos * CGFloat(width), y: 310, width: 100, height: 100))
         }
