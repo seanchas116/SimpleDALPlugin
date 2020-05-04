@@ -15,6 +15,7 @@ class Stream: Object {
     let height = 720
     let frameRate = 30
 
+    private var currentTimeMsec: UInt64 = 0
     private var sequenceNumber: UInt64 = 0
     private var queueAlteredProc: CMIODeviceStreamQueueAlteredProc?
     private var queueAlteredRefCon: UnsafeMutableRawPointer?
@@ -67,7 +68,7 @@ class Stream: Object {
     private lazy var timer: DispatchSourceTimer = {
         let interval = 1.0 / Double(frameRate)
         let timer = DispatchSource.makeTimerSource()
-        timer.schedule(deadline: .now() + interval, repeating: interval)
+        timer.schedule(deadline: .now() + interval, repeating: .milliseconds(1000 / frameRate))
         timer.setEventHandler(handler: { [weak self] in
             self?.enqueueBuffer()
         })
@@ -87,6 +88,7 @@ class Stream: Object {
     ]
 
     func start() {
+        currentTimeMsec = 0
         timer.resume()
     }
 
@@ -132,17 +134,19 @@ class Stream: Object {
             return
         }
 
-        let currentTimeNsec = mach_absolute_time()
+        let duration = 1000 / UInt64(frameRate)
+        currentTimeMsec += duration
+        let timestamp = CMTime(value: CMTimeValue(currentTimeMsec), timescale: CMTimeScale(1000))
 
         var timing = CMSampleTimingInfo(
-            duration: CMTime(value: 1, timescale: CMTimeScale(frameRate)),
-            presentationTimeStamp: CMTime(value: CMTimeValue(currentTimeNsec), timescale: CMTimeScale(1000_000_000)),
-            decodeTimeStamp: .invalid
+            duration: CMTime(value: CMTimeValue(duration), timescale: CMTimeScale(1000)),
+            presentationTimeStamp: timestamp,
+            decodeTimeStamp: timestamp
         )
 
         var error = noErr
 
-        error = CMIOStreamClockPostTimingEvent(timing.presentationTimeStamp, currentTimeNsec, true, clock)
+        error = CMIOStreamClockPostTimingEvent(timestamp, mach_absolute_time(), true, clock)
         guard error == noErr else {
             log("CMSimpleQueueCreate Error: \(error)")
             return
