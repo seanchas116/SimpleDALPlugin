@@ -68,7 +68,7 @@ class Stream: Object {
     private lazy var timer: DispatchSourceTimer = {
         let interval = 1.0 / Double(frameRate)
         let timer = DispatchSource.makeTimerSource()
-        timer.schedule(deadline: .now() + interval, repeating: .nanoseconds(Int(NSEC_PER_SEC) / frameRate))
+        timer.schedule(deadline: .now() + interval, repeating: .milliseconds(1000 / frameRate))
         timer.setEventHandler(handler: { [weak self] in
             self?.enqueueBuffer()
         })
@@ -134,24 +134,25 @@ class Stream: Object {
             return
         }
 
-        let duration = NSEC_PER_SEC / UInt64(frameRate)
+        let duration = 1000 / UInt64(frameRate)
 
         if currentTimeNsec == 0 {
-            currentTimeNsec = mach_absolute_time()
+            currentTimeNsec = mach_absolute_time() / 1000_000
         } else {
             currentTimeNsec += duration
         }
-        let timestamp = CMTime(value: CMTimeValue(currentTimeNsec), timescale: CMTimeScale(NSEC_PER_SEC), flags: .hasBeenRounded, epoch: 0)
+        let timestamp = CMTime(value: CMTimeValue(currentTimeNsec), timescale: CMTimeScale(1000))
 
         var timing = CMSampleTimingInfo(
-            duration: CMTime(value: CMTimeValue(duration), timescale: CMTimeScale(NSEC_PER_SEC)),
+            duration: CMTime(value: CMTimeValue(duration), timescale: CMTimeScale(1000)),
             presentationTimeStamp: timestamp,
             decodeTimeStamp: timestamp
         )
+        log(timing)
 
         var error = noErr
 
-        error = CMIOStreamClockPostTimingEvent(timestamp, currentTimeNsec, true, clock)
+        error = CMIOStreamClockPostTimingEvent(timestamp, mach_absolute_time(), true, clock)
         guard error == noErr else {
             log("CMSimpleQueueCreate Error: \(error)")
             return
