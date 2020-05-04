@@ -143,7 +143,6 @@ class Stream: Object {
             presentationTimeStamp: timestamp,
             decodeTimeStamp: timestamp
         )
-        log(timing)
 
         var error = noErr
 
