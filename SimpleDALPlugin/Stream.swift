@@ -15,7 +15,7 @@ class Stream: Object {
     let height = 720
     let frameRate = 30
 
-    private var currentTimeNsec: UInt64 = 0
+    private var currentTimeMsec: UInt64 = 0
     private var sequenceNumber: UInt64 = 0
     private var queueAlteredProc: CMIODeviceStreamQueueAlteredProc?
     private var queueAlteredRefCon: UnsafeMutableRawPointer?
@@ -88,7 +88,7 @@ class Stream: Object {
     ]
 
     func start() {
-        currentTimeNsec = 0
+        currentTimeMsec = 0
         timer.resume()
     }
 
@@ -135,8 +135,8 @@ class Stream: Object {
         }
 
         let duration = 1000 / UInt64(frameRate)
-        currentTimeNsec += duration
-        let timestamp = CMTime(value: CMTimeValue(currentTimeNsec), timescale: CMTimeScale(1000))
+        currentTimeMsec += duration
+        let timestamp = CMTime(value: CMTimeValue(currentTimeMsec), timescale: CMTimeScale(1000))
 
         var timing = CMSampleTimingInfo(
             duration: CMTime(value: CMTimeValue(duration), timescale: CMTimeScale(1000)),
