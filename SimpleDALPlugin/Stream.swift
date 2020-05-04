@@ -135,12 +135,7 @@ class Stream: Object {
         }
 
         let duration = 1000 / UInt64(frameRate)
-
-        if currentTimeNsec == 0 {
-            currentTimeNsec = mach_absolute_time() / 1000_000
-        } else {
-            currentTimeNsec += duration
-        }
+        currentTimeNsec += duration
         let timestamp = CMTime(value: CMTimeValue(currentTimeNsec), timescale: CMTimeScale(1000))
 
         var timing = CMSampleTimingInfo(
